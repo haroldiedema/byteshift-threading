@@ -1,0 +1,42 @@
+{
+  "name": "@byteshift/threading",
+  "version": "1.0.0",
+  "description": "A tiny user-friendly threading library",
+  "author": "Harold Iedema <harold@iedema.me>",
+  "devDependencies": {
+    "@rollup/plugin-alias": "^3.1.5",
+    "@rollup/plugin-commonjs": "^20.0.0",
+    "@rollup/plugin-node-resolve": "^13.0.4",
+    "rollup": "^2.56.3",
+    "rollup-plugin-terser": "^7.0.2",
+    "rollup-plugin-typescript2": "^0.30.0",
+    "tslib": "^2.3.1",
+    "typescript": "^4.4.2"
+  },
+  "scripts": {
+    "build": "rollup -c",
+    "watch": "rollup -c --watch"
+  },
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@byteshift/events": "^1.1.1",
+    "@byteshift/injector": "^1.0.3",
+    "reflect-metadata": "^0.1.13"
+  },
+  "main": "dist/index.js",
+  "keywords": [
+    "byteshift",
+    "threading",
+    "workers",
+    "typescript"
+  ],
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/haroldiedema/byteshift-threading/issues"
+  },
+  "homepage": "https://github.com/haroldiedema/byteshift-threading/wiki",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/haroldiedema/byteshift-threading.git"
+  }
+}
