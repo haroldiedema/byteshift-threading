@@ -1,15 +1,12 @@
 'use strict';
 
 import {EventEmitter}                          from '@byteshift/events';
-import {Inject}                                from '@byteshift/injector';
 import {isMainThread, MessagePort, parentPort} from 'worker_threads';
 import {EThreadMessageType}                    from './EThreadMessageType';
 import {ThreadHost}                            from './ThreadHost';
 
 export class ThreadContext
 {
-    @Inject private readonly host: ThreadHost;
-
     public serviceId: string = 'N/A';
     public poolId: number    = null;
 
@@ -32,7 +29,7 @@ export class ThreadContext
                 // will handle the rest of the functionality of this thread.
                 case EThreadMessageType.INIT:
                     this.serviceId = message.svc;
-                    this.service   = new (this.host.getClass(message.svc))();
+                    this.service   = new (ThreadHost.getInstance().getClass(message.svc))();
                     this.poolId    = message.poolId || undefined;
 
                     parentPort.setMaxListeners(256);

@@ -1,6 +1,5 @@
 'use strict';
 
-import {ServiceHost}    from '@byteshift/injector';
 import {isMainThread}   from 'worker_threads';
 import {ThreadDelegate} from './ThreadDelegate';
 import {ThreadHost}     from './ThreadHost';
@@ -21,7 +20,7 @@ export function Delegate(target: (new (...args: any[]) => any)): any
             get:          () => {
                 if (! _instance) {
                     if (isMainThread) {
-                        _instance = new ThreadDelegate<any>(target, ServiceHost.get(ThreadHost).getWorkerByName(target.name));
+                        _instance = new ThreadDelegate<any>(target, ThreadHost.getInstance().getWorkerByName(target.name));
                     } else {
                         _instance = new ThreadDelegate<any>(target);
                     }
@@ -44,7 +43,7 @@ export function DelegatePool(target: (new (...args: any[]) => any)): any
                     throw new Error('A thread pool can only be accessed from the main thread.');
                 }
 
-                return ServiceHost.get(ThreadHost).getPool(target);
+                return ThreadHost.getInstance().getPool(target);
             }
         });
     }

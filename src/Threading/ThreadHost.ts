@@ -1,7 +1,6 @@
 'use strict';
 
 import {EventEmitter}                                    from '@byteshift/events';
-import {Service}                                         from '@byteshift/injector';
 import {isMainThread, MessageChannel, SHARE_ENV, Worker} from 'worker_threads';
 import {EThreadMessageType}                              from './EThreadMessageType';
 import {Thread}                                          from './Thread';
@@ -10,13 +9,32 @@ import {ThreadPool}                                      from './ThreadPool';
 
 export type Threadable = (new (...args: any[]) => Thread);
 
-@Service
+const _G: any = (typeof window !== 'undefined' ? window : global);
+
 export class ThreadHost extends EventEmitter
 {
     private exitCleanlyOnThreadCrash: boolean   = false;
     private bootstrapFile: string               = null;
     private services: ServiceCollection         = new Map();
     private pools: Map<string, ThreadPool<any>> = new Map();
+
+    public static getInstance(): ThreadHost
+    {
+        if (typeof _G['__ByteshiftThreading__'] !== 'undefined') {
+            return _G['__ByteshiftThreading__'];
+        }
+
+        _G['__ByteshiftThreading__'] = new ThreadHost();
+    }
+
+    constructor()
+    {
+        super();
+
+        if (typeof _G['__ByteshiftThreading__'] !== 'undefined') {
+            throw new Error('Use ThreadHost.getInstance() to grab an instance of the ThreadHost.');
+        }
+    }
 
     /**
      * @param {string} bootstrapFile

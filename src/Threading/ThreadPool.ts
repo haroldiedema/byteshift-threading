@@ -9,8 +9,8 @@ import {InstancedThread, Threadable, ThreadHost} from './ThreadHost';
 
 export class ThreadPool<T> extends EventEmitter
 {
-    private threads: Map<number, PooledThread<T>> = new Map();
-    private proxy: DelegateProxy;
+    private readonly threads: Map<number, PooledThread<T>> = new Map();
+    private readonly proxy: DelegateProxy;
 
     constructor(
         private host: ThreadHost,
