@@ -24,7 +24,7 @@ export class ThreadHost extends EventEmitter
             return _G['__ByteshiftThreading__'];
         }
 
-        _G['__ByteshiftThreading__'] = new ThreadHost();
+        return _G['__ByteshiftThreading__'] = new ThreadHost();
     }
 
     constructor()
