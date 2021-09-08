@@ -7,8 +7,8 @@ export declare class ThreadPool<T> extends EventEmitter {
     private onBusyCallback;
     private bootstrapFile;
     private exitCleanlyOnThreadCrash;
-    private threads;
-    private proxy;
+    private readonly threads;
+    private readonly proxy;
     constructor(host: ThreadHost, serviceClass: Threadable, threadCount: number, onBusyCallback: () => void, bootstrapFile: string, exitCleanlyOnThreadCrash?: boolean);
     /**
      * Invokes the given callback when all threads are currently busy while a

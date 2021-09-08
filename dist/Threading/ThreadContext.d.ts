@@ -1,5 +1,4 @@
 export declare class ThreadContext {
-    private readonly host;
     serviceId: string;
     poolId: number;
     private queue;

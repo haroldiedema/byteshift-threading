@@ -10,6 +10,8 @@ export declare class ThreadHost extends EventEmitter {
     private bootstrapFile;
     private services;
     private pools;
+    static getInstance(): ThreadHost;
+    constructor();
     /**
      * @param {string} bootstrapFile
      * @param {boolean} exitCleanlyOnThreadCrash
