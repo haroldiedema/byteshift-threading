@@ -4,3 +4,5 @@ export * from "./Threading/ThreadDelegate";
 export * from "./Threading/ThreadHost";
 export * from "./Threading/ThreadContext";
 export * from "./Threading/ThreadPool";
+export * from "./Threading/Threaded";
+export * from "./Threading/ThreadedPool";

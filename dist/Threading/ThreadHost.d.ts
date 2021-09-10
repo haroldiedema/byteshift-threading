@@ -10,6 +10,8 @@ export declare class ThreadHost extends EventEmitter {
     private bootstrapFile;
     private services;
     private pools;
+    private annotatedServices;
+    private annotatedPools;
     static getInstance(): ThreadHost;
     constructor();
     /**
@@ -21,6 +23,10 @@ export declare class ThreadHost extends EventEmitter {
      * Registers one or more new threads.
      */
     register(...serviceClasses: Threadable[]): void;
+    /**
+     * Registers an annotated thread.
+     */
+    registerAnnotation(autostart: boolean, serviceClass: Threadable): void;
     /**
      * Registers a service class to run in a pool of threads.
      *
@@ -36,6 +42,10 @@ export declare class ThreadHost extends EventEmitter {
      * @param {function} onBusyCallback
      */
     registerPool(serviceClass: Threadable, threadCount: number, onBusyCallback?: () => void): void;
+    /**
+     * Registers an annotated thread pool.
+     */
+    registerPoolAnnotation(autostart: boolean, serviceClass: Threadable, threadCount: number, onBusyCallback?: () => void): void;
     /**
      * Returns a thread delegate of the given service class.
      *
