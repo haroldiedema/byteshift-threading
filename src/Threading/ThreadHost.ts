@@ -18,9 +18,6 @@ export class ThreadHost extends EventEmitter
     private services: ServiceCollection         = new Map();
     private pools: Map<string, ThreadPool<any>> = new Map();
 
-    private annotatedServices: Map<Threadable, boolean>    = new Map();
-    private annotatedPools: Map<Threadable, annotatedPool> = new Map();
-
     public static getInstance(): ThreadHost
     {
         if (typeof _G['__ByteshiftThreading__'] !== 'undefined') {
@@ -47,9 +44,6 @@ export class ThreadHost extends EventEmitter
     {
         this.bootstrapFile            = bootstrapFile;
         this.exitCleanlyOnThreadCrash = exitCleanlyOnThreadCrash;
-
-        this.annotatedServices.forEach((y, x) => this.register(x));
-        this.annotatedPools.forEach((y, x) => this.registerPool(x, y.threadCount, y.onBusyCallback));
     }
 
     /**
@@ -70,14 +64,6 @@ export class ThreadHost extends EventEmitter
 
             this.services.set(serviceClass.name, {service: serviceClass, thread: null, worker: null});
         });
-    }
-
-    /**
-     * Registers an annotated thread.
-     */
-    public registerAnnotation(autostart: boolean, serviceClass: Threadable): void
-    {
-        this.annotatedServices.set(serviceClass, autostart);
     }
 
     /**
@@ -110,18 +96,6 @@ export class ThreadHost extends EventEmitter
             serviceClass.name,
             new ThreadPool<typeof serviceClass>(this, serviceClass, threadCount, onBusyCallback, this.bootstrapFile, this.exitCleanlyOnThreadCrash),
         );
-    }
-
-    /**
-     * Registers an annotated thread pool.
-     */
-    public registerPoolAnnotation(autostart: boolean, serviceClass: Threadable, threadCount: number, onBusyCallback?: () => void): void
-    {
-        this.annotatedPools.set(serviceClass, {
-            autostart,
-            threadCount,
-            onBusyCallback
-        });
     }
 
     /**
@@ -190,11 +164,6 @@ export class ThreadHost extends EventEmitter
             throw new Error('A thread can only be started from the main thread.');
         }
 
-        if (serviceClasses.length === 0) {
-            this.annotatedServices.forEach((autostart, x) => autostart ? this.start(x) : null);
-            return;
-        }
-
         for (let serviceClass of serviceClasses) {
             await this._start(serviceClass);
         }
@@ -210,10 +179,6 @@ export class ThreadHost extends EventEmitter
     {
         if (!isMainThread) {
             throw new Error('A thread pool can only be started from the main thread.');
-        }
-        
-        if (serviceClasses.length === 0) {
-            this.annotatedPools.forEach((y, x) => y.autostart ? this.startPool(x) : null);
         }
 
         for (let serviceClass of serviceClasses) {
@@ -359,12 +324,6 @@ export type InstancedThread = {
     thread: ThreadDelegate<any>,
     worker: Worker
 };
-
-type annotatedPool = {
-    autostart: boolean,
-    threadCount: number,
-    onBusyCallback?: () => void
-}
 
 type ServiceCollection = Map<string, InstancedThread>;
 
