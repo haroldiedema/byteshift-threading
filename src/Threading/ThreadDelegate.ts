@@ -79,6 +79,11 @@ export class ThreadDelegate<T> extends EventEmitter
             // We're being executed from the main thread. Pass the request to
             // the active worker instance and wait for a response...
             return new Promise((resolve) => {
+
+                if (!this.worker) {
+                    throw new Error(`Unable to call ${methodName}(). ${this.svcId} has not been started.`);
+                }
+
                 const messageId = this.generateFreeMessageId();
                 this.queue.set(messageId, resolve);
 
